@@ -3,6 +3,15 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  font-family: var(--font-mulish);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-alegreya);
+}
 @layer components {
   h2 {
     @apply font-semibold;

@@ -1,5 +1,4 @@
 import Message from "@/components/messages/Message";
-import Link from "next/link";
 
 const MessagesPage = () => {
   const messages = [

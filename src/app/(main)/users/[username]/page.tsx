@@ -1,6 +1,7 @@
-import Message from "@/components/messages/Message";
 import UserTabs from "@/components/users/UserTabs";
 import Link from "next/link";
+import profilePic from "../../../../../public/Princess_Leia.jpg";
+import Image from "next/image";
 
 const UserPage = ({ params }: { params: { username: string } }) => {
   const user = {
@@ -34,8 +35,15 @@ const UserPage = ({ params }: { params: { username: string } }) => {
   return (
     <main className="flex flex-col bg-gray-100 p-8">
       <section className="flex flex-col mb-8">
-        <div className="rounded-full p-6 bg-gray-300 w-20 text-center">
-          <span className="font-semibold text-lg">JD</span>
+        <div className=" text-center block relative w-20 h-20">
+          <Image
+            className="rounded-full"
+            src={profilePic}
+            alt="Picture of the author"
+            fill
+            priority
+            placeholder="blur"
+          />
         </div>
         <h2 className="mb-1">{user.name}</h2>
         <div className="text-md mb-4 text-gray-600 cursor-pointer">

@@ -1,4 +1,5 @@
 import { MessageType } from "@/types/message.types";
+import Image from "next/image";
 import Link from "next/link";
 
 type MessageProps = {
@@ -24,6 +25,15 @@ const Message = ({ message }: MessageProps) => {
             </div>
           </div>
           <p> {message.message}</p>
+          <div>
+            <Image
+              className="rounded-full"
+              src="https://na.wargaming.net/clans/media/clans/emblems/cl_433/1000050433/emblem_195x195.png"
+              alt="Picture of the author"
+              width={300}
+              height={300}
+            />
+          </div>
         </div>
       </div>
 

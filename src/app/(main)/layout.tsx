@@ -1,5 +1,4 @@
 import Menu from "@/components/menu/Menu";
-import Link from "next/link";
 import { FC, PropsWithChildren } from "react";
 
 const LINKS = [

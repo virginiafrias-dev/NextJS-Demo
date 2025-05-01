@@ -18,8 +18,11 @@ const config: Config = {
         xl: "24px",
         xxl: "32px",
       },
+      fontFamily: {
+        title: ["var(--font-alegreya)"],
+        body: ["var(--font-mulish)"],
+      },
     },
   },
 };
-
 export default config;

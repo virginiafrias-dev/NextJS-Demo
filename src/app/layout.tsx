@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Alegreya, Mulish } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const alegreya = Alegreya({
   subsets: ["latin"],
+  variable: "--font-alegreya",
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const mulish = Mulish({
   subsets: ["latin"],
+  variable: "--font-mulish",
 });
 
 export const metadata: Metadata = {
@@ -23,8 +22,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${mulish.variable} ${alegreya.variable}`}>
+      <body>
+        {/* <h1 className="font-bold italic">ESTE ES UN TITULO</h1>
+        <h2 className="font-semibold">Este es un Subtitulo</h2> */}
+
         {children}
       </body>
     </html>
