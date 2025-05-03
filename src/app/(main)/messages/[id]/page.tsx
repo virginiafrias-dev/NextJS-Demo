@@ -1,5 +1,16 @@
-const MessagePage = ({ params }: { params: { id: string } }) => {
-  return <div>Message:{params.id}</div>;
-};
+// const MessagePage = ({ params }: { params: { id: string } }) => {
+//   const { id } = params;
 
-export default MessagePage;
+//   return <div>Message:{id}</div>;
+// };
+
+// export default MessagePage;
+
+// export default async function MessagePage({
+//   params,
+// }: {
+//   params: Promise<{ slug: string }>;
+// }) {
+//   const { slug } = await params;
+//   return <h1>Message: {slug}</h1>;
+// }

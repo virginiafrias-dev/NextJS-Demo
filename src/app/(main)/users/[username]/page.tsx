@@ -1,36 +1,20 @@
 import UserTabs from "@/components/users/UserTabs";
 import Link from "next/link";
-import profilePic from "../../../../../public/Princess_Leia.jpg";
 import Image from "next/image";
+import userAPI from "@/services/users/users.service";
 
-const UserPage = ({ params }: { params: { username: string } }) => {
-  const user = {
-    username: params.username,
-    name: "John Doe",
-    bio: "Yo soy John Doe",
-    followersCount: 15,
-    followingCount: 5,
-    messages: [
-      {
-        name: "John Doe",
-        username: "JohnD",
-        message: "Primer mensaje",
-        repliesCount: 13,
-      },
-      {
-        name: "John Doe",
-        username: "JohnD",
-        message: "Segundo mensaje",
-        repliesCount: 20,
-      },
-    ],
-    replies: [
-      {
-        message: "Mi respuesta",
-        repliesCount: 0,
-      },
-    ],
-  };
+const UserPage = async ({ params }: { params: { username: string } }) => {
+  const userPromise = userAPI.getUserData(params.username);
+  const userMessagePromise = userAPI.getUserMessages(params.username);
+  const userMessageRepliesPromise = userAPI.getUserMessageReplies(
+    params.username
+  );
+
+  const [user, userMessage, userMessageReplies] = await Promise.all([
+    userPromise,
+    userMessagePromise,
+    userMessageRepliesPromise,
+  ]);
 
   return (
     <main className="flex flex-col bg-gray-100 p-8">
@@ -38,11 +22,10 @@ const UserPage = ({ params }: { params: { username: string } }) => {
         <div className=" text-center block relative w-20 h-20">
           <Image
             className="rounded-full"
-            src={profilePic}
+            src={user.photoUrl}
             alt="Picture of the author"
             fill
             priority
-            placeholder="blur"
           />
         </div>
         <h2 className="mb-1">{user.name}</h2>
@@ -63,7 +46,10 @@ const UserPage = ({ params }: { params: { username: string } }) => {
           </div>
         </div>
       </section>
-      <UserTabs messages={user.messages} replies={[]} />
+      <UserTabs
+        messages={userMessage.content}
+        replies={userMessageReplies.content}
+      />
     </main>
   );
 };
