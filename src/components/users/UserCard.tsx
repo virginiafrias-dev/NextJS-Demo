@@ -27,7 +27,7 @@ const UserCard = ({ user, layout, children }: UserCardProps) => {
     <div className=" mb-4 grid grid-cols-12">
       <div className="w-full h-full mt-1 text-center block relative w-20 h-20 col-span-2 flex items-center justify-center">
         <Image
-          className="rounded-full "
+          className="rounded-full"
           src={user.photoUrl}
           alt={user.name}
           width={60}

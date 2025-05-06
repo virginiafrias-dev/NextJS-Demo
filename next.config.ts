@@ -24,6 +24,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/messages",
+        destination: "/",
+        permanent: true,
+      },
+    ];
+  },
   /* config options here */
 };
 

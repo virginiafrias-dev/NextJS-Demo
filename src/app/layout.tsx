@@ -23,9 +23,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${mulish.variable} ${alegreya.variable}`}>
-      <Navbar />
-      <body>{children}</body>
-    </html>
+    <>
+      <html lang="en" className={`${mulish.variable} ${alegreya.variable}`}>
+        <Navbar />
+        <body>{children}</body>
+      </html>
+    </>
   );
 }

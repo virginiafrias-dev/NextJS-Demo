@@ -35,13 +35,11 @@ const UserPage = async ({ params }: { params: { username: string } }) => {
         <div className="mb-4">{user.bio}</div>
         <div className="flex justify-between mb-4">
           <div>
-            {" "}
-            <span className="font-semibold"> {user.followersCount}</span>{" "}
+            <span className="font-semibold"> {user.followersCount}</span>
             Seguidores
           </div>
           <div>
-            {" "}
-            <span className="font-semibold"> {user.followingCount}</span>{" "}
+            <span className="font-semibold"> {user.followingCount}</span>
             Siguiendo
           </div>
         </div>
