@@ -18,7 +18,7 @@ h3 {
     @apply flex;
     @apply flex-col;
 
-    @apply justify-center;
+    @apply items-center;
   }
   section {
     @apply px-4;
