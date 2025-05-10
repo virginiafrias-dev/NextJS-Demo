@@ -30,6 +30,16 @@ class MessageAPI {
     parentId?: string
   ): Promise<MessageType> =>
     httpPost(`/messages`, { message: message, parentId: parentId ?? null });
+
+  geMessagesByHash = async (
+    hashtag: string,
+    page: number,
+    size: number
+  ): Promise<PageType<MessageType>> =>
+    httpGetPublic(
+      `/messages/hash/${hashtag}`,
+      new URLSearchParams({ page: `${page}`, size: `${size}` })
+    );
 }
 
 const messageAPI = new MessageAPI();

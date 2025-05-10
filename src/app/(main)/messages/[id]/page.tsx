@@ -1,6 +1,5 @@
-import Message from "@/components/messages/Message";
-import MessagePostForm from "@/components/messages/MessagePostForm";
 import messageAPI from "@/services/messages/message.service";
+import MessagePageContainer from "../page.container";
 
 const MessagePage = async ({ params }: { params: { id: string } }) => {
   const repliesPagePromise = messageAPI.geMessageReplies(params.id, 0, 10);
@@ -13,19 +12,11 @@ const MessagePage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <main className="flex flex-col bg-gray-100 p-8">
-      <section className="flex flex-col mb-8">
-        <Message message={message}></Message>
-      </section>
-
-      <section className="flex flex-col mb-8">
-        <MessagePostForm parentId={params.id} />
-      </section>
-
-      <section className="flex flex-col w-full">
-        {repliesPage.content.map((reply, index) => (
-          <Message key={`${index}`} message={reply}></Message>
-        ))}
-      </section>
+      <MessagePageContainer
+        message={message}
+        repliesPage={repliesPage}
+        parentId={params.id}
+      />
     </main>
   );
 };
