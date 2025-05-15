@@ -3,7 +3,6 @@ import { TrendingHashtag } from "@/types/hash.types";
 import { PageType } from "@/types/pagination.types";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import ExploreTabs from "../explore/ExploreTabs";
 import MessageHashtag from "./MessageHashtag";
 
 type MessagehashtagListProps = {

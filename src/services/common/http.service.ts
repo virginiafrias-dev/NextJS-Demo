@@ -1,44 +1,74 @@
 import { URLSearchParams } from "url";
+import { AccessDeniedError } from "./http.errors";
 
-const API_URL = "http://localhost:8080/api";
-const API_PUBLIC_ENDPOINT = `/public`;
+export class HttpBaseAPI {
+  protected privateEndpoint: string;
+  protected publicEndpointSuffix: string;
 
-export const httpGet = async <T>(
-  endpoint: string,
-  params?: URLSearchParams
-): Promise<T> => {
-  const res = await fetch(
-    `${API_URL}${endpoint}${params ? `?${params}` : ""}`,
-    { cache: "no-cache" }
-  );
-  if (!res.ok) {
-    throw new Error("Failed to retrieve: " + endpoint);
+  constructor(privateEndpoint: string, publicEndpointSuffix: string) {
+    this.privateEndpoint = privateEndpoint;
+    this.publicEndpointSuffix = publicEndpointSuffix;
   }
-  return res.json();
-};
 
-export const httpGetPublic = async <T>(
-  endpoint: string,
-  params?: URLSearchParams
-): Promise<T> => {
-  return httpGet(`${API_PUBLIC_ENDPOINT}${endpoint}`, params);
-};
-
-export const httpPost = async <T>(
-  endpoint: string,
-  body: object
-): Promise<T> => {
-  const res = await fetch(`${API_URL}${endpoint}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization:
-        "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzb2NpYWwtYXBpIiwiaWF0IjoxNjkxNTE0MzE5LCJ1c2VybmFtZSI6ImFuYWtpbiJ9.Z4mWYcs_BmAys_3MN62Xzi7sBwMoXZqH95U_SQkKBd4",
-    },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) {
-    throw new Error("Failed to post: " + endpoint);
+  async httpGet<T>(
+    endpointSuffix: string,
+    params?: URLSearchParams,
+    accessToken?: string
+  ): Promise<T> {
+    const res = await fetch(
+      `${this.privateEndpoint}${endpointSuffix}${params ? `?${params}` : ""}`,
+      {
+        cache: "no-cache",
+        headers: !accessToken
+          ? { "Content-Type": "application/json" }
+          : {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+      }
+    );
+    if (!res.ok) {
+      console.log(`${res.status} ${res.statusText}`);
+      throw new Error("Failed to retrieve: " + endpointSuffix);
+    }
+    return res.json();
   }
-  return res.json();
-};
+
+  async httpGetPublic<T>(
+    endpointSuffix: string,
+    params?: URLSearchParams
+  ): Promise<T> {
+    return this.httpGet(
+      `${this.publicEndpointSuffix}${endpointSuffix}`,
+      params
+    );
+  }
+
+  async httpPost<T>(
+    endpointSuffix: string,
+    body: object,
+    accessToken?: string
+  ): Promise<T> {
+    const res = await fetch(`${this.privateEndpoint}${endpointSuffix}`, {
+      method: "POST",
+      headers: !accessToken
+        ? { "Content-Type": "application/json" }
+        : {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      if (res.status === 403) {
+        throw new AccessDeniedError("user has no access");
+      }
+      throw new Error("Failed to post: " + endpointSuffix);
+    }
+    return res.json();
+  }
+
+  async httpPostPublic<T>(endpointSuffix: string, body: object): Promise<T> {
+    return this.httpPost(`${this.publicEndpointSuffix}${endpointSuffix}`, body);
+  }
+}
