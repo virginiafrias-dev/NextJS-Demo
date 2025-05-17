@@ -47,6 +47,17 @@ h3 {
   .button-primary:hover {
     @apply bg-blue-600;
   }
+
+  .button-secondary {
+    @apply bg-blue-400;
+    @apply text-gray-50;
+    @apply px-6;
+    @apply py-2;
+    @apply rounded-lg;
+  }
+  .button-secondary:hover {
+    @apply bg-gray-600;
+  }
   .link-primary {
     @apply text-blue-400;
     @apply font-semibold;

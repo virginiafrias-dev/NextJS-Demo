@@ -1,21 +1,24 @@
 "use client";
 
 import useMessages from "@/contexts/message.context";
-import messageAPI from "@/services/messages/message.service";
+import { UserType } from "@/types/user.types";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type MessagePostFormType = {
   parentId?: string;
+  currentUser?: UserType;
 };
 
 type FormData = {
   message: string;
-  parentId?: string;
 };
 
-const MessagePostForm = ({ parentId }: MessagePostFormType) => {
+const MessagePostForm = ({ parentId, currentUser }: MessagePostFormType) => {
+  const router = useRouter();
+
   const { postMessage } = useMessages();
 
   const { register, handleSubmit, resetField, setFocus } = useForm<FormData>();
@@ -30,15 +33,32 @@ const MessagePostForm = ({ parentId }: MessagePostFormType) => {
     setFocus("message");
   };
 
-  // "https://i.pinimg.com/564x/1b/2d/c0/1b2dc0ce77080e4a682fbbfd2eb3b0c1.jpg";
+  const goToLogin = () => {
+    router.push("/login");
+    router.refresh();
+  };
+
+  if (!currentUser) {
+    return (
+      <div className=" mb-4 flex flex-col items-center">
+        <h3>Iniciá sesión para postear un mensaje</h3>
+        <button
+          className="button-primary w-fit mt-4"
+          type="submit"
+          onClick={() => goToLogin()}
+        >
+          Iniciar Sesión
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className=" mb-4 grid grid-cols-12">
       <div className="w-full h-full mt-1 text-center block relative w-20 h-20 col-span-2 flex items-center justify-center">
         <Image
           className="rounded-full"
-          src={
-            "https://i.pinimg.com/564x/1b/2d/c0/1b2dc0ce77080e4a682fbbfd2eb3b0c1.jpg"
-          }
+          src={currentUser.photoUrl}
           alt={""}
           width={60}
           height={60}

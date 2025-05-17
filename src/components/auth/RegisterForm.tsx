@@ -2,9 +2,13 @@
 
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import SubmitButton from "../form/SubmitButton";
 import InputText from "../form/InputText";
+import RegisterScheme from "@/schemes/register.scheme";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import authAPI from "@/services/auth/auth.api";
+import { ConflictError } from "@/services/common/http.errors";
 
 type FormData = {
   username: string;
@@ -13,28 +17,35 @@ type FormData = {
   photoUrl: string;
 };
 
-const schema = yup
-  .object({
-    username: yup.string().required(),
-    password: yup.string().required(),
-    name: yup.string().required(),
-    photoUrl: yup.string().required(),
-  })
-  .required();
-
 const RegisterForm = () => {
+  const router = useRouter();
+  const [serverError, setServerError] = useState<string | null>(null);
   const methods = useForm<FormData>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(RegisterScheme),
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = methods;
+  const { handleSubmit } = methods;
 
-  const onSubmit = (data: FormData) => {
-    console.log(JSON.stringify(data));
+  const onSubmit = async (data: FormData) => {
+    setServerError(null);
+    try {
+      const loginRespone = await authAPI.register(
+        data.username,
+        data.password,
+        data.name,
+        data.photoUrl
+      );
+      console.log(JSON.stringify(loginRespone));
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      if (error instanceof ConflictError) {
+        setServerError("El nombre de usuario ya existe");
+      } else {
+        setServerError("Ha ocurrido un error. Intente mas tarde");
+      }
+    }
+    return false;
   };
 
   return (
@@ -72,6 +83,7 @@ const RegisterForm = () => {
         />
 
         <SubmitButton label="Crear cuenta" onSubmit={onSubmit} styles="mt-4" />
+        {serverError && <div className="mt-4 text-red-600">{serverError}</div>}
       </form>
     </FormProvider>
   );

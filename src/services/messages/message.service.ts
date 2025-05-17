@@ -1,6 +1,7 @@
 import { PageType } from "@/types/pagination.types";
 import { MessageType } from "@/types/message.types";
 import httpInternalApi from "../common/http.internal.service";
+import httpExternalApi from "../common/http.external.service";
 
 class MessageAPI {
   geMessageFeed = async (
@@ -29,7 +30,7 @@ class MessageAPI {
     message: string,
     parentId?: string
   ): Promise<MessageType> =>
-    httpInternalApi.httpPost(`/messages`, {
+    httpExternalApi.httpPost(`/proxy/messages`, {
       message: message,
       parentId: parentId ?? null,
     });

@@ -28,7 +28,7 @@ export class HttpBaseAPI {
       }
     );
     if (!res.ok) {
-      console.log(`${res.status} ${res.statusText}`);
+      console.log(`${res.status} ${res.statusText} - ${accessToken} `);
       throw new Error("Failed to retrieve: " + endpointSuffix);
     }
     return res.json();
@@ -60,6 +60,7 @@ export class HttpBaseAPI {
       body: JSON.stringify(body),
     });
     if (!res.ok) {
+      console.log(`${res.status} - ${res.statusText}`);
       if (res.status === 403) {
         throw new AccessDeniedError("user has no access");
       }
